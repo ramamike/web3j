@@ -1,0 +1,132 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Comparing</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script>
+        document.write('update time is ' +Date()+ '<br />')
+    </script>
+    <style>
+        .layer1 {
+            background-color: #FFA07A; /* Цвет фона */
+        }
+       .layer1_1 {
+            background-color: #20B2AA; /* Цвет фона */
+        }
+        .layer2 {
+            margin-left: 5%; /* Отступ слева */
+            background-color: #ccc; /* Цвет фона */
+            padding: 10px; /* Поля вокруг текста */
+        }
+        .text {
+            font-size = 30px;
+        }
+        .wrapper {
+             display: grid;
+             grid-auto-rows: 100px; /* высота 100px */
+             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+             transform: scaleY(-1); /* зеркальное отражение по вертикали */
+        }
+
+        .wrapper > div {
+            background: aliceblue;
+              border: 1px solid cadetblue;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              transform: scaleY(-1);
+        }
+    </style>
+</head>
+<body>
+<header>Input</header>
+<h1>Browse staking for contract</h1>
+<div class="layer1">
+    <div class="layer2">
+        <div class="container mt-5 mb-5">
+            <form action="/comparing" method="post">
+                <h2>Browse with scanning events</h2>
+                <input type="text" name="urlHttpServiceScan" placeholder="Enter the url of HTTP service" class ="form control"><br>
+                <input type="text" name="contractAddressScan" placeholder="Enter the contract address" class ="form control"><br>
+                <h2>Browse with reading contract</h2>
+                <input type="text" name="urlHttpServiceRead" placeholder="Enter the url of HTTP service" class ="form control"><br>
+                <input type="text" name="contractAddressRead" placeholder="Enter the contract address" class ="form control"><br>
+                <button type="submit" class="btn btn-success">start browsing</button>
+            </form>
+        </div>
+        <div class="text wrapper mt-2 mb-2">
+            <div>
+                Result of comparing:
+            </div>
+            <div th:text="${resultComparing}"/>
+        </div>
+        <h3> clear data</h3>
+        <form action="/clear" method="post">
+            <button type="submit" class="btn btn-success" onclick="showPleaseWait()">Clear</button>
+        </form>
+    </div>
+</div>
+
+<header>Staking from event list</header>
+<div class="layer1_1">
+    <div class="layer2">
+        <p th:text="${counterOfUpdating}"/>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>account</th>
+                <th>amount</th>
+                <th>stakingTypeIndex</th>
+                <th>stakeIndex</th>
+                <th>stakingStatus</th>
+            </tr>
+            </thead>
+            <tbody th:each="stakingEvent : ${stakingEventList}">
+            <tr>
+                <th th:text = "${stakingEvent.account}" />
+                <th th:text = "${stakingEvent.amount}" />
+                <th th:text = "${stakingEvent.stakingTypeIndex}" />
+                <th th:text = "${stakingEvent.stakeIndex}" />
+                <th th:text = "${stakingEvent.stakingStatus}" />
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<header>Staking from contract interface</header>
+<div class="layer1_1">
+    <div class="layer2">
+        <p th:text="${counterOfUpdating}"/>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>account</th>
+                <th>amount</th>
+                <th>stakingTypeIndex</th>
+                <th>stakeIndex</th>
+                <th>stakingStatus</th>
+            </tr>
+            </thead>
+            <tbody th:each="staking : ${stakingList}">
+            <tr>
+                <th th:text = "${staking.account}" />
+                <th th:text = "${staking.amount}" />
+                <th th:text = "${staking.stakingTypeIndex}" />
+                <th th:text = "${staking.stakeIndex}" />
+                <th th:text = "${staking.stakingStatus}" />
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+<script>
+<!--      function load() {-->
+<!--        alert("Please wait");-->
+<!--      }-->
+<!--      window.onload = load;-->
+</script>
+</html>
